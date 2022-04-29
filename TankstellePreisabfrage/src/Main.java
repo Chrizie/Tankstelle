@@ -17,8 +17,8 @@ public class Main
 
 	public static void main(String[] args) throws IOException
 	{
-		System.out.println("Trying to connect...");
-		System.out.println(httpRequest());
+		System.out.println("Trying to connect...\n" + checkHttpRequest());
+		System.out.println(gettingData("price"));
 		Calendar cal = Calendar.getInstance();
 		System.out.println(cal.getTime());
 		
@@ -30,7 +30,7 @@ public class Main
 
 	}
 
-	static String httpRequest() throws IOException
+	static String checkHttpRequest() throws IOException
 	{
 		StringBuffer responseContent = new StringBuffer();
 		BufferedReader reader;
@@ -44,15 +44,7 @@ public class Main
 
 		if(connection.getResponseMessage().equals("OK"))
 		{
-			reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			while((line = reader.readLine()) != null)
-			{
-				responseContent.append(line + "\n");
-			}
-			responseContent = new StringBuffer();
-			reader.close();
-
-			return "connection successful \n" + responseContent.toString();
+			return "connection successful";
 		}
 		else
 		{
@@ -67,8 +59,34 @@ public class Main
 		}
 	}
 
-	static void gettingData()
+	
+	static String gettingData(String getData)
 	{
-
+		StringBuffer responseContent = new StringBuffer();
+		BufferedReader reader;
+		String line;
+		
+		try 
+		{
+			reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			while((line = reader.readLine()) != null)
+			{
+				if(line.contains("name"))
+				{
+					responseContent.append(line + "\n");
+				}
+				else if(line.contains(getData))
+				{
+					responseContent.append(line + "\n");
+				}
+			}
+			reader.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return responseContent.toString();
 	}
 }
