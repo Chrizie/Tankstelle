@@ -1,9 +1,13 @@
+package function;
+import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
+
+import windowBuilder.window;
 
 public class Main
 {
@@ -17,8 +21,24 @@ public class Main
 
 	public static void main(String[] args) throws IOException
 	{
+		{
+			EventQueue.invokeLater(new Runnable()
+			{
+				public void run() 
+				{
+					try {
+						window frame = new window();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		
 		System.out.println("Trying to connect...\n" + checkHttpRequest());
 		System.out.println(gettingData("price"));
+		
 		Calendar cal = Calendar.getInstance();
 		System.out.println(cal.getTime());
 		
