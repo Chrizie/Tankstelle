@@ -49,9 +49,12 @@ public class Window extends JFrame
 	{
 		String column[]={"ID","NAME","SALARY"};     
 		
-		   String data[][]={ {"101","Amit","670000"},    
-          {"102","Jai","780000"},    
-          {"101","Sachin","700000"}}; 
+		   String data[][]=
+			{ 
+				   {"101","Amit","670000"},    
+				   {"102","Jai","780000"},    
+				   {"101","Sachin","700000"}
+			};
 		
 		
 		JPanel contentPane = new JPanel();
@@ -69,10 +72,31 @@ public class Window extends JFrame
 			contentPanel.setBounds(190, 97, 994, 464);
 			contentPanel.setLayout(new CardLayout(0, 0));
 					
+						
+							//---------- Home ----------
+							JPanel homePanel = new JPanel();
+							homePanel.setMinimumSize(new Dimension(32767, 32767));
+							homePanel.setVerifyInputWhenFocusTarget(false);
+							homePanel.setFocusable(false);
+							homePanel.setBackground(SystemColor.activeCaption);
+							homePanel.setBounds(199, 97, 985, 464);
+							contentPane.add(homePanel);
+							homePanel.setLayout(null);
+							DefaultTableModel modelAlert = new DefaultTableModel(data, column);
+							JTable ausgabeTabelle = new JTable(modelAlert);
+							ausgabeTabelle.setSelectionBackground(SystemColor.textHighlight);
+							ausgabeTabelle.setAutoCreateRowSorter(true);
+							ausgabeTabelle.setShowGrid(false);
+							ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 16));
+							ausgabeTabelle.setBackground(SystemColor.activeCaption);
+							ausgabeTabelle.setBounds(10, 11, 965, 442);
+							homePanel.add(ausgabeTabelle);
+					
 					
 					JPanel piratePanel = new JPanel();
 					piratePanel.setBackground(SystemColor.activeCaption);
 					piratePanel.setBounds(199, 97, 985, 464);
+					piratePanel.setVisible(false);
 					contentPane.add(piratePanel);
 					piratePanel.setLayout(null);
 					
@@ -123,27 +147,7 @@ public class Window extends JFrame
 									JButton piratenKnopf = new JButton("Piratenknopf");
 									piratenKnopf.setBounds(774, 386, 139, 23);
 									settingsPanel.add(piratenKnopf);
-				
-					
-						//---------- Home ----------
-						JPanel homePanel = new JPanel();
-						homePanel.setMinimumSize(new Dimension(32767, 32767));
-						homePanel.setVerifyInputWhenFocusTarget(false);
-						homePanel.setFocusable(false);
-						homePanel.setBackground(SystemColor.activeCaption);
-						homePanel.setBounds(199, 97, 985, 464);
-						contentPane.add(homePanel);
-						homePanel.setLayout(null);
 						
-							DefaultTableModel modelAlert = new DefaultTableModel(data, column);
-							JTable ausgabeTabelle = new JTable(modelAlert);
-							ausgabeTabelle.setSelectionBackground(SystemColor.textHighlight);
-							ausgabeTabelle.setAutoCreateRowSorter(true);
-							ausgabeTabelle.setShowGrid(false);
-							ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 16));
-							ausgabeTabelle.setBackground(SystemColor.activeCaption);
-							ausgabeTabelle.setBounds(10, 11, 965, 442);
-							homePanel.add(ausgabeTabelle);
 				//---------- Home ENDE ----------
 				
 					
