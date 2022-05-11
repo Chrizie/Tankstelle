@@ -2,6 +2,7 @@ package function;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
@@ -27,41 +28,36 @@ public class Main extends APIBeans
 	private static String apiKey = "";
 	private static String urlAndKey = URL+apiKey;
 	private static Window frame;
-	static StringBuffer responseContent;
 	
+	static StringBuffer responseContent;
 	private static HttpURLConnection connection;
 
 	public static void main(String[] args) throws IOException
 	{
 		try
 		{
+			Main main = new Main();
+			main.getData();
 			frame = new Window();
 			frame.setVisible(true);
 			
-			  ArrayList<String> list = new ArrayList<String>();
-			    list.add("Test");
-			    list.add("Test2");
-			    list.add("Test3");
-			    //System.out.println(listToArray(list).toString());
-				
-				Calendar cal = Calendar.getInstance();
-				System.out.println(cal.getTime());
+			
+			Calendar cal = Calendar.getInstance();
+			System.out.println(cal.getTime());
 			
 		}
 		catch (Exception exception) 
 		{
 			exception.printStackTrace();
-			JOptionPane.showMessageDialog(null, exception.getMessage(),"Exception caught", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, exception.getMessage(),"Exception caught in Main", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		System.out.println("Trying to connect...\n" + checkHttpRequest());
+		//System.out.println("Trying to connect...\n" + main.checkHttpRequest());
 		
-		
-		listToArray();
 		
 		//TODO Implement time logging
 		// setInterval research
-		parse();
+		
 
 		System.in.read();
 		
@@ -71,7 +67,6 @@ public class Main extends APIBeans
 	
 	static void listToArray() 
 	{
-	     
 	   List<String> test1 = new ArrayList<>();
 	   
 	   test1.add("test1");
@@ -84,13 +79,12 @@ public class Main extends APIBeans
 	     
 	}
 
-	static String checkHttpRequest() throws IOException
+	public String checkHttpRequest() throws IOException
 	{
 		StringBuffer responseContent = new StringBuffer();
 		BufferedReader reader;
 		String line;
-
-		URL url = new URL("https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=4&sort=price&type=e10&apikey=00000000-0000-0000-0000-000000000002");
+		URL url = new URL("https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=5&sort=price&type=e10&apikey=00000000-0000-0000-0000-000000000002");
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setConnectTimeout(5000);
@@ -114,57 +108,107 @@ public class Main extends APIBeans
 			return "Problems connecting\n***********Error message*********** \n" + connection.getErrorStream();
 		}
 	}
+	
+	public InputStream getData() throws IOException
+	{
+		if(getRadius() == null && getGasType() == null)
+		{
+			setGasType("e10");
+			setRadius("5");
+		}
+		System.out.println(getGasType());
+		System.out.println(getRadius());
+		StringBuffer responseContent = new StringBuffer();
+		BufferedReader reader;
+		String line;
+		StringBuilder urlData = new StringBuilder();
+		String lat = "50.02675533406389";
+		String lng = "9.022982602772519";
+		String rad = getRadius();
+		String sort = "price";
+		String type = getGasType();
+		String key = "00000000-0000-0000-0000-000000000002";
+		urlData.append("https://creativecommons.tankerkoenig.de/json/list.php?");
+		urlData.append("lat="+lat+"&");
+		urlData.append("lng="+lng+"&");
+		urlData.append("rad="+rad+"&");
+		urlData.append("sort="+sort+"&");
+		urlData.append("type="+type+"&");
+		urlData.append("apikey="+key);
+		System.out.println(urlData.toString());
+		URL url = new URL(urlData.toString());
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("GET");
+		connection.setConnectTimeout(5000);
+		connection.setReadTimeout(5000);
 
+		if(connection.getResponseMessage().equals("OK"))
+		{
+			return connection.getInputStream();
+		}
+		else
+		{
+			reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+			while((line = reader.readLine()) != null)
+			{
+				responseContent.append(line + "\n");
+			}
+			reader.close();
+			
+			JOptionPane.showMessageDialog(null, connection.getErrorStream(),"Exception caught", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+			return connection.getErrorStream();
+		}
+	}
+
+	
+	public void windowValues()
+	{
+		Window window = new Window();
+
+	}
+	
+	
 	//TODO Muss hier irgendwie String[][] für die Tabelle füllen
-	static void parse()
+	public String[][] parse()
 	{
 		
 		StringBuilder responseContent = new StringBuilder();
 		BufferedReader reader;
+		String[][] array = null;
 		String line;
 		
+	
 		try 
 		{
-			reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			System.out.println(connection.getInputStream());
+			reader = new BufferedReader(new InputStreamReader(getData()));
 			while((line = reader.readLine()) != null)
 			{
-					responseContent.append(line);
+					responseContent.append(line + "\n");
 			}
-			JSONArray jsonArr = null;
-			try {jsonArr = new JSONArray(responseContent.toString());}
-			catch(Exception exception) {exception.printStackTrace();}
-			String name = "";
-			for(int i = 0; i < jsonArr.length(); i++)
-			{
-				JSONObject jsonObj = null;
-				try {jsonObj = (JSONObject) jsonArr.get(i);}
-				catch(Exception exception) {exception.printStackTrace();}
-				
-				try {name = (String) jsonObj.get("name");}
-				catch(Exception exception) {exception.printStackTrace();}
-				System.out.println(responseContent);
-				System.out.println(name);	
-				System.out.println(jsonArr.length());	
-			}	
+			
+			String stringResponseContent = responseContent.toString();
+			int myInt;
+			myInt = stringResponseContent.indexOf("[");
+			System.out.println(myInt);
+			stringResponseContent = stringResponseContent.substring(myInt);
+			
+			JSONArray jsonArr = new JSONArray(stringResponseContent);
+			array = new String[jsonArr.length()][5];
+				   	System.out.println(jsonArr.length());
 				   	
-//				   	System.out.println(json.length());
-//				   	String[][] array = new String[json.length()][5];
-//				   	
-//				   	for (int i=0; i < json.length(); i++) 
-//				   	{                           
-//				   	    JSONObject obj = json.getJSONObject(i);
-//				   	    array[i][0] = obj.getString("name");
-//				   	    array[i][1] = obj.getString("street");
-//				   	    array[i][2] = obj.getString("place");
-//				   	    array[i][3] = obj.getString("price");
-//				   	    array[i][4] = obj.getString("isOpen");
-//								
-//					reader.close();
-					
-				
-		   	
-		   	//System.out.println(array);	   	 
-				}
+				   	for (int i=0; i < jsonArr.length(); i++) 
+				   	{        
+				   		System.out.println(Arrays.deepToString(array));
+				   	    JSONObject obj = jsonArr.getJSONObject(i);
+				   	    array[i][0] = obj.getString("name");
+				   	    array[i][1] = obj.getString("street");
+				   	    array[i][2] = obj.getString("place");
+				   	    array[i][3] = String.valueOf(obj.getDouble("price"));
+				   	    array[i][4] = String.valueOf(obj.getBoolean("isOpen"));
+				   	}
+		}
 			
 		
 					//table.add(line);
@@ -173,8 +217,7 @@ public class Main extends APIBeans
 		{
 			e.printStackTrace();
 		}
-	    JSONObject jo = new JSONObject(responseContent);
-					JSONObject jo_root = jo.getJSONObject("root");
-					parse();
+		return array;
 	}
+	
 }

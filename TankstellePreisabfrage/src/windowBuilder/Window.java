@@ -2,10 +2,13 @@ package windowBuilder;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import function.APIBeans;
+import function.Main;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -36,6 +39,7 @@ import java.awt.SystemColor;
 import java.awt.CardLayout;
 
 import java.util.Set;
+import java.util.function.IntPredicate;
 import java.awt.Dimension;
 
 public class Window extends JFrame
@@ -44,17 +48,16 @@ public class Window extends JFrame
 	
 	Clip clip;
 	boolean pirateAudio;
+	Main main;
+	APIBeans beans;
 	
 	public Window() 
 	{
-		String column[]={"ID","NAME","SALARY"};     
+		main = new Main();
+		beans = new APIBeans();
+		String column[]={"ID","NAME","SALARY","test","test"};     
 		
-		   String data[][]=
-			{ 
-				   {"101","Amit","670000"},    
-				   {"102","Jai","780000"},    
-				   {"101","Sachin","700000"}
-			};
+		   
 		
 		
 		JPanel contentPane = new JPanel();
@@ -82,16 +85,20 @@ public class Window extends JFrame
 							homePanel.setBounds(199, 97, 985, 464);
 							contentPane.add(homePanel);
 							homePanel.setLayout(null);
-							DefaultTableModel modelAlert = new DefaultTableModel(data, column);
-							JTable ausgabeTabelle = new JTable(modelAlert);
+							
+							
+							DefaultTableModel model = new DefaultTableModel(main.parse(), column);
+							JTable ausgabeTabelle = new JTable(model);
+							ausgabeTabelle.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+							ausgabeTabelle.getColumnModel().getColumn(0).setPreferredWidth(250);
+							ausgabeTabelle.setDefaultEditor(Object.class, null);
 							ausgabeTabelle.setSelectionBackground(SystemColor.textHighlight);
 							ausgabeTabelle.setAutoCreateRowSorter(true);
 							ausgabeTabelle.setShowGrid(false);
-							ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 16));
+							ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 13));
 							ausgabeTabelle.setBackground(SystemColor.activeCaption);
 							ausgabeTabelle.setBounds(10, 11, 965, 442);
 							homePanel.add(ausgabeTabelle);
-					
 					
 					JPanel piratePanel = new JPanel();
 					piratePanel.setBackground(SystemColor.activeCaption);
@@ -157,8 +164,8 @@ public class Window extends JFrame
 				alertsPanel.setBounds(199, 97, 985, 464);
 				contentPane.add(alertsPanel);
 				
-					DefaultTableModel model = new DefaultTableModel(data, column);
-					JTable 	alertsTable = new JTable(model);
+					//DefaultTableModel modelAlerts = new DefaultTableModel(null, 5);
+					JTable 	alertsTable = new JTable();
 					alertsTable.setBackground(SystemColor.activeCaption);
 					alertsTable.setFont(new Font("Tahoma", Font.BOLD, 16));
 					alertsTable.setBounds(10, 63, 965, 390);
@@ -221,34 +228,37 @@ public class Window extends JFrame
 					
 					JLabel lblNewLabel_5 = new JLabel("Treibstoff");
 					lblNewLabel_5.setFont(new Font("Verdana", Font.BOLD, 12));
-					lblNewLabel_5.setBounds(455, 11, 66, 14);
+					lblNewLabel_5.setBounds(632, 11, 66, 14);
 					head.add(lblNewLabel_5);
 					
-					JComboBox auswahlSpritArt = new JComboBox();
+					JComboBox<String> auswahlSpritArt = new JComboBox<String>();
 					auswahlSpritArt.setBounds(632, 32, 111, 28);
 					auswahlSpritArt.setBackground(new Color(255, 255, 255));
-					auswahlSpritArt.setFont(new Font("Verdana", Font.PLAIN, 11));
-					auswahlSpritArt.setName("");
+					auswahlSpritArt.setFont(new Font("Verdana", Font.BOLD, 11));
+					auswahlSpritArt.addItem("e5");
+					auswahlSpritArt.addItem("e10");
+					auswahlSpritArt.addItem("diesel");
 					head.add(auswahlSpritArt);
 					
 					JLabel lblNewLabel_6 = new JLabel("Umkreis");
 					lblNewLabel_6.setFont(new Font("Verdana", Font.BOLD, 12));
-					lblNewLabel_6.setBounds(632, 11, 71, 14);
+					lblNewLabel_6.setBounds(455, 11, 71, 14);
 					head.add(lblNewLabel_6);
 					
-					JComboBox auswahlRadius = new JComboBox();
+					JComboBox<String> auswahlRadius = new JComboBox<String>();
 					auswahlRadius.setBounds(455, 32, 111, 28);
-					auswahlRadius.setName("");
-					auswahlRadius.setFont(new Font("Verdana", Font.PLAIN, 11));
+					auswahlRadius.addItem("5");
+					auswahlRadius.addItem("10");
+					auswahlRadius.addItem("25");
+					auswahlRadius.setFont(new Font("Verdana", Font.BOLD, 11));
 					auswahlRadius.setBackground(new Color(255, 255, 255));
 					head.add(auswahlRadius);
 					
-					JLabel hyperlinkMaps = new JLabel("Nach Maps");
-					hyperlinkMaps.setFont(new Font("Tahoma", Font.BOLD, 15));
-					hyperlinkMaps.setToolTipText("Auf Google Maps anschauen");
-					hyperlinkMaps.setBackground(new Color(255, 255, 255));
-					hyperlinkMaps.setBounds(809, 33, 111, 28);
-					head.add(hyperlinkMaps);
+					Button suchenButton = new Button("Suche");
+					suchenButton.setActionCommand("Suche");
+					suchenButton.setFont(new Font("Verdana", Font.BOLD, 12));
+					suchenButton.setBounds(817, 32, 97, 28);
+					head.add(suchenButton);
 				//---------- Head ENDE ----------
 				
 					
@@ -371,7 +381,7 @@ public class Window extends JFrame
 							
 						}
 					});
-					
+					auswahlSpritArt.getSelectedItem();
 					alertButton.addActionListener(new ActionListener() 
 					{
 						public void actionPerformed(ActionEvent e) 
@@ -411,6 +421,29 @@ public class Window extends JFrame
 							settingsPanel.setVisible(false);
 							piratePanel.setVisible(true);
 							startAudio();
+						}
+					});
+					
+					suchenButton.addActionListener(new ActionListener() 
+					{
+						public void actionPerformed(ActionEvent e) 
+						{
+							String sprit = (String) auswahlSpritArt.getSelectedItem();
+							String radius = (String)auswahlRadius.getSelectedItem();
+							beans.setGasType(sprit);
+							beans.setRadius(radius);
+							try 
+							{
+								main.getData();
+								main.parse();
+								//TODO Tabelle wird nicht mit neuen daten ausgegeben
+								model.fireTableDataChanged();
+							}
+							catch (IOException e1) 
+							{
+								e1.printStackTrace();
+							}
+							
 						}
 					});
 					//---------- Button Actions ENDE ----------
