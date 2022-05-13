@@ -86,7 +86,6 @@ public class Window extends JFrame
 							contentPane.add(homePanel);
 							homePanel.setLayout(null);
 							
-							
 							DefaultTableModel model = new DefaultTableModel(main.parse(), column);
 							JTable ausgabeTabelle = new JTable(model);
 							ausgabeTabelle.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -99,7 +98,8 @@ public class Window extends JFrame
 							ausgabeTabelle.setBackground(SystemColor.activeCaption);
 							ausgabeTabelle.setBounds(10, 11, 965, 442);
 							homePanel.add(ausgabeTabelle);
-					
+							
+							
 					JPanel piratePanel = new JPanel();
 					piratePanel.setBackground(SystemColor.activeCaption);
 					piratePanel.setBounds(199, 97, 985, 464);
@@ -381,7 +381,6 @@ public class Window extends JFrame
 							
 						}
 					});
-					auswahlSpritArt.getSelectedItem();
 					alertButton.addActionListener(new ActionListener() 
 					{
 						public void actionPerformed(ActionEvent e) 
@@ -428,16 +427,18 @@ public class Window extends JFrame
 					{
 						public void actionPerformed(ActionEvent e) 
 						{
-							String sprit = (String) auswahlSpritArt.getSelectedItem();
-							String radius = (String)auswahlRadius.getSelectedItem();
-							beans.setGasType(sprit);
-							beans.setRadius(radius);
 							try 
 							{
+								String sprit = (String) auswahlSpritArt.getSelectedItem();
+								String radius = (String) auswahlRadius.getSelectedItem();
+								
+								main.setData(sprit,radius);
 								main.getData();
-								main.parse();
-								//TODO Tabelle wird nicht mit neuen daten ausgegeben
+								DefaultTableModel model = new DefaultTableModel(main.parse(), column);
+								JTable ausgabeTabelle = new JTable(model);
 								model.fireTableDataChanged();
+								
+								//TODO Tabelle wird nicht mit neuen daten ausgegeben
 							}
 							catch (IOException e1) 
 							{

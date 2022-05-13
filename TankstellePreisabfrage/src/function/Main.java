@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import org.json.JSONArray;
@@ -109,13 +110,24 @@ public class Main extends APIBeans
 		}
 	}
 	
+	public void setData(String sprit, String radius)
+	{
+		setGasType(sprit);
+		setRadius(radius);
+		System.out.println(getGasType());
+		System.out.println(getRadius());
+	}
+	
 	public InputStream getData() throws IOException
 	{
-		if(getRadius() == null && getGasType() == null)
+	
+		if(getGasType() == null && getRadius() == null)
 		{
 			setGasType("e10");
 			setRadius("5");
+			System.out.println("Is Null");
 		}
+		
 		System.out.println(getGasType());
 		System.out.println(getRadius());
 		StringBuffer responseContent = new StringBuffer();
@@ -135,7 +147,7 @@ public class Main extends APIBeans
 		urlData.append("sort="+sort+"&");
 		urlData.append("type="+type+"&");
 		urlData.append("apikey="+key);
-		System.out.println(urlData.toString());
+		System.out.println("URL: "+urlData.toString());
 		URL url = new URL(urlData.toString());
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
@@ -169,7 +181,6 @@ public class Main extends APIBeans
 	}
 	
 	
-	//TODO Muss hier irgendwie String[][] für die Tabelle füllen
 	public String[][] parse()
 	{
 		
@@ -181,7 +192,7 @@ public class Main extends APIBeans
 	
 		try 
 		{
-			System.out.println(connection.getInputStream());
+			System.out.println(getData());
 			reader = new BufferedReader(new InputStreamReader(getData()));
 			while((line = reader.readLine()) != null)
 			{
