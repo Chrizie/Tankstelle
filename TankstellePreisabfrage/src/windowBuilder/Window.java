@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -33,13 +34,19 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.Button;
 import java.awt.SystemColor;
 import java.awt.CardLayout;
-
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 import java.util.function.IntPredicate;
+import java.util.logging.SimpleFormatter;
 import java.awt.Dimension;
 
 public class Window extends JFrame
@@ -86,18 +93,9 @@ public class Window extends JFrame
 							contentPane.add(homePanel);
 							homePanel.setLayout(null);
 							
-							DefaultTableModel model = new DefaultTableModel(main.parse(), column);
-							JTable ausgabeTabelle = new JTable(model);
-							ausgabeTabelle.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-							ausgabeTabelle.getColumnModel().getColumn(0).setPreferredWidth(250);
-							ausgabeTabelle.setDefaultEditor(Object.class, null);
-							ausgabeTabelle.setSelectionBackground(SystemColor.textHighlight);
-							ausgabeTabelle.setAutoCreateRowSorter(true);
-							ausgabeTabelle.setShowGrid(false);
-							ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 13));
-							ausgabeTabelle.setBackground(SystemColor.activeCaption);
-							ausgabeTabelle.setBounds(10, 11, 965, 442);
-							homePanel.add(ausgabeTabelle);
+						
+							
+							
 							
 							
 					JPanel piratePanel = new JPanel();
@@ -327,13 +325,16 @@ public class Window extends JFrame
 								createNewAlertPanel.add(auswahlTreibstoffCreateAlert);
 					//---------- Settings ENDE ----------
 					
-					
-					JLabel dateLabel = new JLabel("Datum");
+					Date today = Calendar.getInstance().getTime();
+					SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd.MM.yyyy");
+					JLabel dateLabel = new JLabel(dateTimeFormatter.format(today));
 					dateLabel.setFont(new Font("Verdana", Font.PLAIN, 11));
-					dateLabel.setBounds(10, 439, 46, 14);
+					dateLabel.setBounds(10, 439, 87, 14);
 					sidebar.add(dateLabel);
 					
-					JLabel timeLabel = new JLabel("Uhrzeit");
+					LocalTime zeit = LocalTime.now();
+					System.out.println(zeit);
+					JLabel timeLabel = new JLabel(zeit.getHour()+":"+zeit.getMinute());
 					timeLabel.setFont(new Font("Verdana", Font.PLAIN, 11));
 					timeLabel.setBounds(144, 439, 46, 14);
 					sidebar.add(timeLabel);
@@ -434,11 +435,21 @@ public class Window extends JFrame
 								
 								main.setData(sprit,radius);
 								main.getData();
+								
 								DefaultTableModel model = new DefaultTableModel(main.parse(), column);
 								JTable ausgabeTabelle = new JTable(model);
-								model.fireTableDataChanged();
-								
-								//TODO Tabelle wird nicht mit neuen daten ausgegeben
+								ausgabeTabelle.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+								ausgabeTabelle.getColumnModel().getColumn(0).setPreferredWidth(250);
+								ausgabeTabelle.setDefaultEditor(Object.class, null);
+								ausgabeTabelle.setSelectionBackground(SystemColor.textHighlight);
+								ausgabeTabelle.setAutoCreateRowSorter(true);
+								ausgabeTabelle.setShowGrid(false);
+								ausgabeTabelle.setFont(new Font("Tahoma", Font.BOLD, 13));
+								ausgabeTabelle.setBackground(SystemColor.activeCaption);
+								ausgabeTabelle.setBounds(10, 11, 965, 442);
+								homePanel.add(ausgabeTabelle);
+								TableModelEvent tableModelEvent = new TableModelEvent(model);
+								model.fireTableChanged(tableModelEvent);
 							}
 							catch (IOException e1) 
 							{

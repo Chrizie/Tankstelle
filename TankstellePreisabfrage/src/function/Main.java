@@ -42,9 +42,10 @@ public class Main extends APIBeans
 			frame = new Window();
 			frame.setVisible(true);
 			
+			SucheDB db = new SucheDB("", 0, 0);
+			System.out.println(db.getLatLngFromDB());
 			
-			Calendar cal = Calendar.getInstance();
-			System.out.println(cal.getTime());
+			
 			
 		}
 		catch (Exception exception) 
@@ -196,7 +197,7 @@ public class Main extends APIBeans
 			reader = new BufferedReader(new InputStreamReader(getData()));
 			while((line = reader.readLine()) != null)
 			{
-					responseContent.append(line + "\n");
+				responseContent.append(line + "\n");
 			}
 			
 			String stringResponseContent = responseContent.toString();
