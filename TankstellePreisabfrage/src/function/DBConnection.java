@@ -12,10 +12,8 @@ public class DBConnection
 	    
 	    try
 	    {
-	        String url = "jdbc:sqlite:C:\\Users\\Chris\\git\\Tankstelle\\TankstellePreisabfrage\\SqliteDB\\location.db";
+	        String url = "jdbc:sqlite:SqliteDB\\location.db";
 	        connection = DriverManager.getConnection(url);
-	        
-	        System.out.println("Connection to SQLite has been established.");
 	    }
 	    catch(Exception exception)
 	    {

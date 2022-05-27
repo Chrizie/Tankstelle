@@ -21,13 +21,15 @@ import org.json.JSONObject;
 import netscape.javascript.JSObject;
 import windowBuilder.Window;
 
-public class Main extends APIBeans
+public class Main extends SucheDB
 {
-	public Main() {}
+	
+	public Main(String stadt, double lat, double lng) 
+	{
+		super(stadt, lng, lng);
+	}
 	
 	private static String URL = "https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=4&sort=price&type=e10&apikey=";
-	private static String apiKey = "";
-	private static String urlAndKey = URL+apiKey;
 	private static Window frame;
 	
 	static StringBuffer responseContent;
@@ -37,15 +39,10 @@ public class Main extends APIBeans
 	{
 		try
 		{
-			Main main = new Main();
+			Main main = new Main("",0,0);
 			main.getData();
 			frame = new Window();
 			frame.setVisible(true);
-			
-			SucheDB db = new SucheDB("", 0, 0);
-			System.out.println(db.getLatLngFromDB());
-			
-			
 			
 		}
 		catch (Exception exception) 
@@ -67,19 +64,6 @@ public class Main extends APIBeans
 
 	}
 	
-	static void listToArray() 
-	{
-	   List<String> test1 = new ArrayList<>();
-	   
-	   test1.add("test1");
-	   test1.add("test1");
-	   test1.add("test1");
-	   List<ArrayList<String>> test2 = new ArrayList<>();
-	   
-	   
-	   
-	     
-	}
 
 	public String checkHttpRequest() throws IOException
 	{
@@ -174,12 +158,6 @@ public class Main extends APIBeans
 		}
 	}
 
-	
-	public void windowValues()
-	{
-		Window window = new Window();
-
-	}
 	
 	
 	public String[][] parse()

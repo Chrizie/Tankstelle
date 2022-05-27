@@ -5,9 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class SucheDB 
+public class SucheDB extends APIBeans
 {
 	private String stadt = "";
 	private double lat = 0;
@@ -25,7 +26,7 @@ public class SucheDB
 		Connection connection = null; 
 		PreparedStatement prepStatement = null;
 		ResultSet resultSet = null;
-		ArrayList<SucheDB> stadtLatLng = null;
+		ArrayList<SucheDB> stadtLatLng = new ArrayList<SucheDB>();
 		int rc = 1;
 		final String sql = "SELECT * from location;";
 		
@@ -37,10 +38,10 @@ public class SucheDB
 	       
 			while(resultSet.next())
 			{
-				stadtLatLng = new ArrayList<SucheDB>();
-				stadtLatLng.add(new SucheDB(resultSet.getString("stadt"), resultSet.getDouble("lat"), resultSet.getDouble("lng")));
-				System.out.println(stadtLatLng.toString());
-				//TODO falscher output
+				setStadt(resultSet.getString("stadt"));
+				setLat(resultSet.getDouble("lat"));
+				setLng(resultSet.getDouble("lng"));
+				stadtLatLng.add(new SucheDB(getStadt(), getLat(), getLng()));
 			}
 		}
 		catch(SQLException e) 
@@ -54,5 +55,46 @@ public class SucheDB
 			resultSet.close();
 		}
 		return stadtLatLng; 
+	}
+	
+	
+	public ArrayList<SucheDB> getLatLngFromDBByTown(String town) throws Exception
+	{
+		Connection connection = null; 
+		PreparedStatement prepStatement = null;
+		ResultSet resultSet = null;
+		ArrayList<SucheDB> latLng = new ArrayList<SucheDB>();
+		final String sql = "SELECT * FROM location WHERE stadt = '"+town+"';";
+		
+		try 
+		{
+			connection = DBConnection.connect();
+			prepStatement = connection.prepareStatement(sql);
+			resultSet = prepStatement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				setStadt(resultSet.getString("stadt"));
+				setLat(resultSet.getDouble("lat"));
+				setLng(resultSet.getDouble("lng"));
+				latLng.add(new SucheDB(getStadt(), getLat(), getLng()));
+			}
+		}
+		catch(SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			connection.close();
+			prepStatement.close();
+			resultSet.close();
+		}
+		return latLng; 
+	}
+	
+	public String toString()
+	{
+	    return(this.stadt);
 	}
 }

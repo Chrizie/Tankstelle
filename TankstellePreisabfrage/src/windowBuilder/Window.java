@@ -4,15 +4,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import function.APIBeans;
 import function.Main;
+import function.SucheDB;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.BooleanControl;
@@ -25,11 +30,13 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.JTextPane;
+import javax.swing.JWindow;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -42,12 +49,19 @@ import java.awt.event.ActionEvent;
 import java.awt.Button;
 import java.awt.SystemColor;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.function.IntPredicate;
 import java.util.logging.SimpleFormatter;
 import java.awt.Dimension;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Window extends JFrame
 {
@@ -58,14 +72,14 @@ public class Window extends JFrame
 	Main main;
 	APIBeans beans;
 	
-	public Window() 
+	public Window() throws Exception 
 	{
-		main = new Main();
+		main = new Main("",0,0);
 		beans = new APIBeans();
 		String column[]={"ID","NAME","SALARY","test","test"};     
-		
+		SucheDB db = new SucheDB("", 0, 0);
 		   
-		
+		ArrayList<SucheDB> townList = db.getLatLngFromDB();
 		
 		JPanel contentPane = new JPanel();
 		setTitle("Spritpreise");
@@ -222,7 +236,100 @@ public class Window extends JFrame
 					eingabeStadt.setBounds(59, 32, 328, 28);
 					eingabeStadt.setDisabledTextColor(new Color(255, 255, 255));
 					eingabeStadt.setBackground(new Color(255, 255, 255));
+					eingabeStadt.addInputMethodListener(null);
 					head.add(eingabeStadt);
+					
+					/** TODO
+					 * Read input in Textfield 
+					 * add the elements from ArrayList where that contains the town String
+					 * if clicked, add name to textfield
+					 * get lat and lng to the city from DB
+					 */
+					
+					
+					JComboBox autocompletePopup = new JComboBox();
+					autocompletePopup.setBounds(59, 59, 328, 28);
+					
+					eingabeStadt.getDocument().addDocumentListener(new DocumentListener() 
+					{
+						  public void changedUpdate(DocumentEvent e) 
+						  {
+						    try {
+								warn();
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						  }
+						  public void removeUpdate(DocumentEvent e) 
+						  {
+						    try {
+								warn();
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						  }
+						  public void insertUpdate(DocumentEvent e) 
+						  {
+						    try {
+								warn();
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						  }
+
+						  public void warn() throws HeadlessException, Exception 
+						  {
+							  String selectedText;
+							  for(int i = 0; i < townList.size(); i++)
+								{
+								  //TODO Stände sind in der DB großgeschrieben, "ALZENAU"
+								  	selectedText = eingabeStadt.getText();
+								  	System.out.println(townList.get(i));
+									if(townList.get(i).toString().equals(selectedText))
+									{
+										autocompletePopup.addItem(selectedText);
+										List<SucheDB> latlng = db.getLatLngFromDBByTown(selectedText);
+										System.out.println(latlng.get(0).toString());
+										//TODO Probleme lat und lng aus der DB zu bekommen 
+										//System.out.println(beans.setLat(latlng.get(1)));
+										//System.out.println(latlng.get(2));
+										
+									}
+								}
+						  }
+						});
+					
+					
+//					for(int i = 0; i < db.getLatLngFromDB().size(); i++)
+//					{
+//						if(db.getLatLngFromDB().get(i).equals(selectedText))
+//						{
+//							autocompletePopup.addItem(db.getLatLngFromDB().get(i));
+//						}
+//					}
+					
+					
+					
+					
+					
+					
+//					autocompletePopup.getPopupMenuListeners();
+//					autocompletePopup.addPopupMenuListener(null);
+					
+					autocompletePopup.setVisible(true);
+					head.add(autocompletePopup);
 					
 					JLabel lblNewLabel_5 = new JLabel("Treibstoff");
 					lblNewLabel_5.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -257,6 +364,7 @@ public class Window extends JFrame
 					suchenButton.setFont(new Font("Verdana", Font.BOLD, 12));
 					suchenButton.setBounds(817, 32, 97, 28);
 					head.add(suchenButton);
+					
 				//---------- Head ENDE ----------
 				
 					
@@ -336,7 +444,7 @@ public class Window extends JFrame
 					System.out.println(zeit);
 					JLabel timeLabel = new JLabel(zeit.getHour()+":"+zeit.getMinute());
 					timeLabel.setFont(new Font("Verdana", Font.PLAIN, 11));
-					timeLabel.setBounds(144, 439, 46, 14);
+					timeLabel.setBounds(146, 439, 44, 14);
 					sidebar.add(timeLabel);
 					
 					Button homeButton = new Button("Home");
@@ -433,6 +541,8 @@ public class Window extends JFrame
 								String sprit = (String) auswahlSpritArt.getSelectedItem();
 								String radius = (String) auswahlRadius.getSelectedItem();
 								
+								//System.out.println(latlng);
+								
 								main.setData(sprit,radius);
 								main.getData();
 								
@@ -495,5 +605,22 @@ public class Window extends JFrame
 		    clip.loop(0);
 			clip.flush();
 		}
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
