@@ -5,14 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SucheDB extends APIBeans
 {
-	private String stadt = "";
-	private double lat = 0;
-	private double lng = 0;
 	
 	public SucheDB(String stadt, double lat, double lng)
 	{
@@ -27,7 +22,7 @@ public class SucheDB extends APIBeans
 		PreparedStatement prepStatement = null;
 		ResultSet resultSet = null;
 		ArrayList<SucheDB> stadtLatLng = new ArrayList<SucheDB>();
-		int rc = 1;
+
 		final String sql = "SELECT * from location;";
 		
 		try 

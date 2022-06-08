@@ -1,24 +1,15 @@
 package function;
-import java.awt.EventQueue;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import netscape.javascript.JSObject;
 import windowBuilder.Window;
 
 public class Main extends SucheDB
@@ -26,10 +17,10 @@ public class Main extends SucheDB
 	
 	public Main(String stadt, double lat, double lng) 
 	{
-		super(stadt, lng, lng);
+		super(stadt, lat, lng);
 	}
 	
-	private static String URL = "https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=4&sort=price&type=e10&apikey=";
+//	private static String URL = "https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=4&sort=price&type=e10&apikey=";
 	private static Window frame;
 	
 	static StringBuffer responseContent;
