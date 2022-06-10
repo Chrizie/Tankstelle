@@ -15,6 +15,9 @@ import windowBuilder.Window;
 public class Main extends SucheDB
 {
 	
+	static final String tankerkoenigApiUrl = "https://creativecommons.tankerkoenig.de/json/list.php?lat=%1$f&lng=%2$f&rad=%3$d&sort=price&type=%4$s&apikey=%5$s";
+	static final String defaultApiKey = "00000000-0000-0000-0000-000000000002";
+
 	public Main(String stadt, double lat, double lng) 
 	{
 		super(stadt, lat, lng);
@@ -42,7 +45,7 @@ public class Main extends SucheDB
 			JOptionPane.showMessageDialog(null, exception.getMessage(),"Exception caught in Main", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		//System.out.println("Trying to connect...\n" + main.checkHttpRequest());
+		//System.out.println("Trying to connect...\n" + checkHttpRequest());
 		
 		
 		//TODO Implement time logging
@@ -56,12 +59,13 @@ public class Main extends SucheDB
 	}
 	
 
-	public String checkHttpRequest() throws IOException
+	static  String checkHttpRequest() throws IOException
 	{
 		StringBuffer responseContent = new StringBuffer();
 		BufferedReader reader;
 		String line;
-		URL url = new URL("https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=5&sort=price&type=e10&apikey=00000000-0000-0000-0000-000000000002");
+		// URL url = new URL("https://creativecommons.tankerkoenig.de/json/list.php?lat=50.02675533406389&lng=9.022982602772519&rad=5&sort=price&type=e10&apikey=00000000-0000-0000-0000-000000000002");
+		URL url = new URL(String.format(tankerkoenigApiUrl, 50.027, 9.023, 5, "e10", defaultApiKey));
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setConnectTimeout(5000);
@@ -109,22 +113,8 @@ public class Main extends SucheDB
 		StringBuffer responseContent = new StringBuffer();
 		BufferedReader reader;
 		String line;
-		StringBuilder urlData = new StringBuilder();
-		String lat = "50.02675533406389";
-		String lng = "9.022982602772519";
-		String rad = getRadius();
-		String sort = "price";
-		String type = getGasType();
-		String key = "00000000-0000-0000-0000-000000000002";
-		urlData.append("https://creativecommons.tankerkoenig.de/json/list.php?");
-		urlData.append("lat="+lat+"&");
-		urlData.append("lng="+lng+"&");
-		urlData.append("rad="+rad+"&");
-		urlData.append("sort="+sort+"&");
-		urlData.append("type="+type+"&");
-		urlData.append("apikey="+key);
-		System.out.println("URL: "+urlData.toString());
-		URL url = new URL(urlData.toString());
+		URL url = new URL(String.format(tankerkoenigApiUrl, 50.026755, 9.022983, Integer.parseInt(getRadius()), getGasType(), defaultApiKey));		
+		System.out.println("URL: "+url);
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setConnectTimeout(5000);
