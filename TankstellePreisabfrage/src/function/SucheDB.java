@@ -45,9 +45,12 @@ public class SucheDB extends APIBeans
 		}
 		finally
 		{
-			connection.close();
-			prepStatement.close();
-			resultSet.close();
+			if (connection != null)
+	        {
+				connection.close();
+				prepStatement.close();
+				resultSet.close();
+	        }
 		}
 		return stadtLatLng; 
 	}
