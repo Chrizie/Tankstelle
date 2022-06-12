@@ -4,7 +4,10 @@
   <artifactId>TankstellePreisabfrage</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Tankstellen Preisabfrage</name>
-  <description>Ermittelz Spritpreise aller Tankstellen innerhalb eines best. Radius</description>
+  <properties>
+    <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+  </properties>
+  <description>Ermittelt Spritpreise aller Tankstellen innerhalb eines best. Radius</description>
   <dependencies>
     <dependency>
       <groupId>org.json</groupId>
