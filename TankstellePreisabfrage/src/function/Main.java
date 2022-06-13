@@ -107,7 +107,7 @@ public class Main extends SucheDB
 			setRadius("5");
 			System.out.println("Is Null");
 		}
-		
+
 		System.out.println(getGasType());
 		System.out.println(getRadius());
 		StringBuffer responseContent = new StringBuffer();

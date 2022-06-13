@@ -2,22 +2,22 @@ package windowBuilder;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+//import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+//import javax.swing.table.TableColumnModel;
 
 import function.APIBeans;
 import function.Main;
 import function.SucheDB;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+//import javax.swing.SwingUtilities;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.BooleanControl;
@@ -30,38 +30,38 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.JTextPane;
-import javax.swing.JWindow;
+//import javax.swing.JWindow;
 import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
-import java.awt.LayoutManager;
+//import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.Button;
 import java.awt.SystemColor;
 import java.awt.CardLayout;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.function.IntPredicate;
-import java.util.logging.SimpleFormatter;
+//import java.util.Set;
+//import java.util.function.IntPredicate;
+//import java.util.logging.SimpleFormatter;
 import java.awt.Dimension;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+//import javax.swing.JPopupMenu;
+//import java.awt.Component;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
 
 public class Window extends JFrame
 {
@@ -158,7 +158,7 @@ public class Window extends JFrame
 									alertTonAuswahl.setBounds(10, 119, 189, 33);
 									settingsPanel.add(alertTonAuswahl);
 									
-									JComboBox alertTonAuswahlcomboBox = new JComboBox();
+									JComboBox<String> alertTonAuswahlcomboBox = new JComboBox<String>();
 									alertTonAuswahlcomboBox.setBackground(SystemColor.window);
 									alertTonAuswahlcomboBox.setBounds(213, 126, 200, 22);
 									settingsPanel.add(alertTonAuswahlcomboBox);
@@ -247,7 +247,7 @@ public class Window extends JFrame
 					 */
 					
 					
-					JComboBox autocompletePopup = new JComboBox();
+					JComboBox<String> autocompletePopup = new JComboBox<String>();
 					autocompletePopup.setBounds(59, 59, 328, 28);
 					
 					eingabeStadt.getDocument().addDocumentListener(new DocumentListener() 
@@ -413,7 +413,7 @@ public class Window extends JFrame
 								lblNewLabel_3_1.setBounds(10, 199, 148, 28);
 								createNewAlertPanel.add(lblNewLabel_3_1);
 								
-								JComboBox auswahlRadiusCreateAlert = new JComboBox();
+								JComboBox<String> auswahlRadiusCreateAlert = new JComboBox<String>();
 								auswahlRadiusCreateAlert.setName("");
 								auswahlRadiusCreateAlert.setFont(new Font("Verdana", Font.PLAIN, 11));
 								auswahlRadiusCreateAlert.setBackground(Color.WHITE);
@@ -425,7 +425,7 @@ public class Window extends JFrame
 								lblNewLabel_3_1_1.setBounds(10, 284, 148, 28);
 								createNewAlertPanel.add(lblNewLabel_3_1_1);
 								
-								JComboBox auswahlTreibstoffCreateAlert = new JComboBox();
+								JComboBox<String> auswahlTreibstoffCreateAlert = new JComboBox<String>();
 								auswahlTreibstoffCreateAlert.setName("");
 								auswahlTreibstoffCreateAlert.setFont(new Font("Verdana", Font.PLAIN, 11));
 								auswahlTreibstoffCreateAlert.setBackground(Color.WHITE);
@@ -606,6 +606,7 @@ public class Window extends JFrame
 			clip.flush();
 		}
 	}
+/*	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -623,4 +624,7 @@ public class Window extends JFrame
 			}
 		});
 	}
+*/
+	
 }
+
